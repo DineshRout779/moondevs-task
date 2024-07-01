@@ -1,12 +1,18 @@
 'use client';
+import { setToken } from '@/redux/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Link from 'next/link';
-import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useState, useEffect } from 'react';
 
 const page = () => {
   const [values, setValues] = useState({
     username: '',
     password: '',
   });
+  const { token } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,11 +24,22 @@ const page = () => {
 
       const data = await res.json();
 
-      console.log('data: ', data);
+      // console.log('data: ', data);
+
+      if (data) {
+        dispatch(setToken(data.token));
+        router.push('/dashboard');
+      }
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      router.push('/dashboard');
+    }
+  }, [token]);
 
   return (
     <div className='min-h-screen flex justify-center items-center'>
