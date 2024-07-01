@@ -3,6 +3,7 @@ import useAuthSession from '@/hooks/useAuthSession';
 import { clearAuth } from '@/redux/auth/authSlice';
 import { useAppDispatch } from '@/redux/store';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 export default function Home() {
   const { user, isLoading } = useAuthSession();
@@ -10,7 +11,7 @@ export default function Home() {
 
   const handleLogout = () => {
     dispatch(clearAuth());
-    console.log('user: ', user);
+    toast.success('Logout successful');
   };
 
   if (isLoading) {

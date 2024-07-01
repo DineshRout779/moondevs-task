@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import User from '@/models/User';
+import connectDB from '@/configs/connectDB';
 
 export async function GET(request: NextRequest) {
   try {
+    await connectDB();
+
     const authHeader = request.headers.get('authorization');
 
     if (!authHeader) {
